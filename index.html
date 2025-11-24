@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC마트 | 1+1 사은품 대축제</title>
+    
+    <!-- 폰트 로드: Noto Sans KR --><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap">
+
+    <style>
+        /* 기본 스타일 및 리셋 */
+        :root {
+            --primary-color: #66b3ff; /* 밝은 하늘색 (Primary) */
+            --secondary-color: #ff99aa; /* 부드러운 분홍색 (Secondary) */
+            --background-light: #f4f8ff; /* 아주 밝은 배경 */
+            --text-dark: #333;
+            --text-light: #fff;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        /* 레이아웃 컨테이너 */
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 1. 헤더 및 내비게이션 */
+        header {
+            background-color: var(--text-light);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            font-weight: 400;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* 모바일 햄버거 메뉴 아이콘 (데스크톱에서는 숨김) */
+        .menu-toggle {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--text-dark);
+        }
+
+        /* 2. 메인 히어로 섹션 */
+        .hero-section {
+            background: linear-gradient(135deg, var(--background-light), #e0efff);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .main-cta {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 153, 170, 0.4);
+            display: inline-block;
+        }
+
+        .main-cta:hover {
+            background-color: #ffb8c5;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 153, 170, 0.6);
+        }
+
+        .product-image {
+            max-width: 90%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 3. 섹션 공통 스타일 */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--text-dark);
+        }
+        
+        /* 4. 기능 섹션 (토글 영역) */
+        .feature-item {
+            background-color: var(--text-light);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .feature-header span {
+            font-size: 1.5rem;
+            transform: rotate(0deg);
+        }
+        
+        .feature-item.active .feature-header span {
+             transform: rotate(45deg); /* 토글 시 +를 X로 변경 */
+        }
+
+        .feature-details {
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            font-weight: 300;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .feature-item.active .feature-details {
+            max-height: 500px; /* 충분히 큰 값으로 설정 */
+            padding-top: 15px;
+        }
+
+        /* 5. 후기 섹션 (카드) */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background-color: var(--text-light);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-card strong {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .reviewer-info {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: auto; /* 하단 정렬 */
+        }
+
+        /* 6. 마무리 CTA 섹션 */
+        .final-cta-section {
+            text-align: center;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 80px 20px;
+        }
+
+        .final-cta-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .final-cta-section .main-cta {
+            background-color: var(--secondary-color);
+        }
+        
+        .final-cta-section .main-cta:hover {
+            background-color: #ffb8c5;
+        }
+
+        /* 7. 푸터 */
+        footer {
+            background-color: #333;
+            color: #ccc;
+            padding: 40px 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-info, .footer-links {
+            flex: 1 1 45%;
+            min-width: 250px;
+        }
+
+        .footer-info p {
+            margin-bottom: 5px;
+        }
+
+        .footer-info a {
+            color: #ccc;
+        }
+
+        /* 미디어 쿼리 (모바일 반응형) */
+        @media (max-width: 768px) {
+            
+            /* 햄버거 메뉴 활성화 */
+            .nav-links {
+                position: absolute;
+                top: 60px; /* 헤더 높이만큼 아래로 */
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--text-light);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                padding: 10px 20px;
+                display: none; /* 기본적으로 숨김 */
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex; /* 토글 시 보여줌 */
+            }
+
+            .nav-links a {
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .menu-toggle {
+                display: block; /* 모바일에서 햄버거 아이콘 보여줌 */
+            }
+            
+            /* 히어로 섹션 */
+            .hero-section {
+                padding: 60px 0 40px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            /* 푸터 */
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .footer-info, .footer-links {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 헤더 (최상단 메뉴 포함) --><header>
+        <div class="container header-content">
+            <!-- 로고 또는 제품명 --><a href="#" class="logo">ABC마트</a>
+            
+            <!-- 내비게이션 링크 --><nav class="nav-links" id="navLinks">
+                <a href="#intro">제품 소개</a>
+                <a href="#features">기능 보기</a>
+                <a href="#reviews">후기</a>
+                <a href="#contact" class="nav-cta">문의하기</a>
+            </nav>
+            
+            <!-- 모바일 햄버거 메뉴 버튼 --><button class="menu-toggle" aria-label="메뉴 토글" onclick="toggleMenu()">
+                &#9776; <!-- 햄버거 아이콘 --></button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. 제품 이미지 및 주요 특징 소개 (Hero) --><section class="hero-section" id="intro">
+            <div class="container hero-content">
+                <h1>🎉 1+1 사은품 대축제! 🎉</h1>
+                <p>지금 ABC마트에서 구매하시면, 하나 더! 혜택이 쏟아집니다. 세일 상품도 놓치지 마세요!</p>
+                <!-- 이미지 파일명 "배경화면.jpg" 삽입 --><img src="배경화면.jpg" 
+                     alt="ABC마트 1+1 이벤트 메인 이미지" 
+                     class="product-image">
+                <p style="margin-top: 30px; font-weight: 700; color: var(--secondary-color);">
+                    기간 한정 특별 할인 + 추가 사은품 증정
+                </p>
+            </div>
+        </section>
+
+        <!-- 3. 기능 더보기 (동적 토글 영역) --><section id="features">
+            <div class="container">
+                <h2 class="section-title">주요 혜택 및 기능 상세 보기</h2>
+
+                <div class="feature-item" onclick="toggleFeature(this)">
+                    <div class="feature-header">
+                        <span>1. 기간 한정 50% 세일 상품 목록</span>
+                        <span>+</span>
+                    </div>
+                    <!-- 자바스크립트로 접히거나 펼쳐지는 영역 --><div class="feature-details">
+                        <p>엄선된 인기 상품 20종을 최대 50% 할인된 가격에 만나보세요. 재고 소진 시 행사는 조기 마감될 수 있습니다. (예: 운동화, 캐주얼 의류, 액세서리)</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                            <li>운동화: 50% 할인</li>
+                            <li>캐주얼 의류: 30% 할인</li>
+                            <li>스포츠 액세서리: 20% 할인</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item" onclick="toggleFeature(this)">
+                    <div class="feature-header">
+                        <span>2. 1+1 사은품 증정 상세 안내</span>
+                        <span>+</span>
+                    </div>
+                    <div class="feature-details">
+                        <p>구매 금액에 따라 다양한 사은품 중 하나를 선택하여 받으실 수 있습니다. 모든 사은품은 한정 수량으로, 선택의 폭이 넓습니다.</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                            <li>5만원 이상 구매: ABC마트 로고 양말 증정</li>
+                            <li>10만원 이상 구매: 고급 슈즈 클리너 세트 증정</li>
+                            <li>20만원 이상 구매: ABC마트 보조 가방 증정</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-item" onclick="toggleFeature(this)">
+                    <div class="feature-header">
+                        <span>3. 온라인/오프라인 동시 진행</span>
+                        <span>+</span>
+                    </div>
+                    <div class="feature-details">
+                        <p>본 행사는 ABC마트의 모든 온라인 채널 및 오프라인 매장에서 동시에 진행됩니다. 매장별 재고 상황은 다를 수 있으니 방문 전 확인해 주세요.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. 사용 예시 또는 후기 (카드 형식) --><section id="reviews" style="background-color: var(--text-light);">
+            <div class="container">
+                <h2 class="section-title">실제 고객 후기</h2>
+                <div class="reviews-grid">
+                    
+                    <article class="review-card">
+                        <p>"세일 상품 득템하고 1+1 사은품까지 받으니 기분이 정말 좋네요! 배송도 빠르고 포장도 꼼꼼했습니다."</p>
+                        <div class="reviewer-info"><strong>만족도 5/5</strong> - 김*민 고객님</div>
+                    </article>
+                    
+                    <article class="review-card">
+                        <p>"원하던 신발을 반값에 사고, 평소 필요했던 클리너 세트까지 받아서 일석이조였어요. 추천합니다!"</p>
+                        <div class="reviewer-info"><strong>만족도 5/5</strong> - 박*수 고객님</div>
+                    </article>
+                    
+                    <article class="review-card">
+                        <p>"온라인으로 편리하게 주문했고, 사은품 옵션도 다양해서 좋았습니다. 다음에 또 이용할 예정입니다."</p>
+                        <div class="reviewer-info"><strong>만족도 4/5</strong> - 이*영 고객님</div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CTA 버튼이 포함된 마무리 섹션 --><section class="final-cta-section" id="contact">
+            <div class="container">
+                <h2>더 궁금한 점이 있으신가요?</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 40px; font-weight: 300;">전문 상담사와 지금 바로 상담하세요.</p>
+                <a href="https://example.com/qna" class="main-cta" role="button">문의하기</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 6. 푸터 --><footer>
+        <div class="container footer-content">
+            <div class="footer-info">
+                <p class="logo">ABC마트</p>
+                <p>Copyright &copy; 2025 ABC Mart All Rights Reserved.</p>
+                <p>문의: <a href="mailto:contact@abcmart.com">contact@abcmart.com</a></p>
+            </div>
+            <div class="footer-links">
+                <p style="margin-bottom: 10px;">회사 정보</p>
+                <a href="#">이용약관</a> | 
+                <a href="#">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * 모바일 내비게이션 메뉴 토글 함수
+         */
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('active');
+        }
+
+        /**
+         * 기능 상세 설명 (Features) 토글 함수
+         * @param {HTMLElement} element - 클릭된 .feature-item 요소
+         */
+        function toggleFeature(element) {
+            // 현재 활성화 상태를 확인합니다.
+            const isActive = element.classList.contains('active');
+
+            // 모든 항목을 닫습니다. (하나만 열리게 하려면)
+            document.querySelectorAll('.feature-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 클릭된 항목이 닫혀있었다면 열어줍니다.
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+
+        // 페이지 로드 후, 헤더 네비게이션 CTA에 '문의하기' 링크 적용
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.nav-cta').href = 'https://example.com/qna';
+        });
+    </script>
+
+</body>
+</html>
